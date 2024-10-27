@@ -43,9 +43,8 @@ cd <repository-folder>
 The application will be accessible at `http://localhost:8050`.
 
 # Usage
-1. Navigate to the application URL (replace with the deployed URL):
-   ```
-https://www.saltprojectabdulrahman.com
+1. Navigate to the application URL 
+   ```https://www.saltprojectabdulrahman.com
    ```
 2. Select one or more salts from the dropdown menu.
 3. Click the 'Submit' button to visualize the graph showing the selected salts and their side effects.
