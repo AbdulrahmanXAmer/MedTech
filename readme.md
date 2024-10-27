@@ -2,6 +2,11 @@
 
 This project is a Dash application that allows users to explore the relationship between different salts (drugs) and their associated side effects using a 3D interactive network graph. The application is built with Python, Dash, and Plotly, and is deployed on AWS using Terraform for infrastructure management.
 
+Feel free to see it Live and In Action! 
+```bash 
+   https://www.saltprojectabdulrahman.com
+   ```
+
 # Features
 - Visualize salt compositions and their side effects in an interactive 3D network graph.
 - Select multiple salts from a dropdown menu to view their side effects.
@@ -44,9 +49,6 @@ The application will be accessible at `http://localhost:8050`.
 
 # Usage
 1. Navigate to the application URL 
-   ```bash 
-   https://www.saltprojectabdulrahman.com
-   ```
 2. Select one or more salts from the dropdown menu.
 3. Click the 'Submit' button to visualize the graph showing the selected salts and their side effects.
 4. Interact with the graph by zooming, rotating, and exploring the connections.
