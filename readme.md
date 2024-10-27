@@ -63,6 +63,7 @@ The project includes Terraform configuration to deploy the application to AWS.
    ```
    terraform apply
    ```
+Replace the `ami`, `key_name`, and any other variables in `main.tf` with your own AWS settings.
 
 This will set up an EC2 instance running the application, along with a security group allowing HTTP/HTTPS access.
 
@@ -71,14 +72,97 @@ This will set up an EC2 instance running the application, along with a security 
 - SSH command to connect to the instance.
 - HTTPS URL to access the deployed Dash application.
 
-Replace the `ami`, `key_name`, and any other variables in `main.tf` with your own AWS settings.
+Use the SSH command to enter the instance.
+
+## Setting Up Nginx and Gunicorn
+
+After SSHing into the EC2 instance:
+
+Install Nginx and Gunicorn:
+
+```bash
+ sudo apt update
+```
+```bash 
+sudo apt install nginx
+```
+```bash
+sudo pip install gunicorn
+```
+
+### Configure Nginx to act as a reverse proxy for the application by editing the Nginx configuration file:
+
+```bash
+ sudo nano /etc/nginx/sites-available/default
+ ```
+
+## Add the following configuration:
+
+```nginx
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:8050;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+
+Restart Nginx to apply the changes:
+
+```bash 
+sudo systemctl restart nginx
+```
+
+Run the application using Gunicorn:
+
+```bash 
+gunicorn app:server -b 0.0.0.0:8050
+```
+
+
+Create a new Systemd service file:
+```bash
+sudo nano /etc/systemd/system/salt-side-effects-app.service
+```
+Add the following content to the file:
+
+```bash
+[Unit]
+Description=Gunicorn instance to serve salt-side-effects-app
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/path/to/your/app
+ExecStart=/usr/local/bin/gunicorn app:server -b 0.0.0.0:8050
+[Install]
+WantedBy=multi-user.target
+```
+
+Make sure to replace /path/to/your/app with the correct path to the application directory.
+
+Reload Systemd to apply the changes:
+
+Start the service:
+```bash sudo systemctl daemon-reload
+
+sudo systemctl start salt-side-effects-app
+```
+Enable the service to start on boot:
+
+```bash 
+sudo systemctl enable salt-side-effects-app
+```
 
 # Contributing
 Feel free to fork the repository and submit pull requests. Any contributions are welcome!
 
-# Contact
-For any questions or suggestions, please reach out via [email address placeholder].
-
-# License
-This project is licensed under the MIT License.
 
